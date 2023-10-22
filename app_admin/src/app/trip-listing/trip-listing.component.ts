@@ -1,8 +1,10 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 // import { trips } from '../data/trips';
 import { TripDataService } from '../services/trip-data.service';
 import { Trip } from '../models/trip';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
 
@@ -20,13 +22,15 @@ export class TripListingComponent implements OnInit {
   
   constructor(
     private tripDataService: TripDataService,
+    private authService: AuthenticationService,
     private router: Router
     ) { }
-
-    private addTrip(): void {
-      this.router.navigate(['add-trip']);
-    }
   
+  private addTrip(): void {
+    this.router.navigate(['add-trip']);
+  }
+
+
   private getTrips(): void {
     console.log('Inside TripListingComponent#getTrips');
     this.message = 'Searching for trips';
@@ -36,9 +40,14 @@ export class TripListingComponent implements OnInit {
           this.message = foundTrips.length > 0 ? '' : 'No trips found';
           this.trips = foundTrips;
         });
-  }
+}
 
-  ngOnInit(): void {
+public isLoggedIn(): boolean {
+  return this.authService.isLoggedIn();
+}
+
+ngOnInit(): void {
   this.getTrips();
-  }
+  
+}
 }
